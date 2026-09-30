@@ -77,6 +77,23 @@ class ChatInterface {
     }
   }
 
+  static Future<void> setPinned({
+    required String chatGuid,
+    bool? isPinned,
+    int? pinIndex,
+  }) async {
+    final data = {
+      'chatGuid': chatGuid,
+      'isPinned': isPinned,
+      'pinIndex': pinIndex,
+    };
+    if (isIsolate || kIsWeb) {
+      return await ChatActions.setPinned(data);
+    } else {
+      return await GetIt.I<GlobalIsolate>().send<void>(IsolateRequestType.setPinned, input: data);
+    }
+  }
+
   static Future<int?> saveChat({
     required String guid,
     required Map<String, dynamic> chatData,

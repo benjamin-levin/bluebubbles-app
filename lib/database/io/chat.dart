@@ -168,7 +168,7 @@ class Chat {
       displayName: json["displayName"],
       customAvatar: json['_customAvatarPath'],
       customBackground: json['_customBackgroundPath'],
-      pinnedIndex: json['_pinIndex'],
+      pinnedIndex: json['pinIndex'] ?? json['_pinIndex'],
       autoSendReadReceipts: json["autoSendReadReceipts"],
       autoSendTypingIndicators: json["autoSendTypingIndicators"],
       dateDeleted: parseDate(json["dateDeleted"]),

@@ -740,6 +740,7 @@ enum IsolateRequestType {
   getParticipantsAsync,
   clearTranscriptAsync,
   getChatsAsync,
+  setPinned,
 
   // Handle actions
   saveHandleAsync,

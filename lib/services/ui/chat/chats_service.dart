@@ -855,6 +855,13 @@ class ChatsService {
       if (state != null) {
         state.pinIndex.value = i;
       }
+
+      // Sync the new order to the server so other connected clients pick it up.
+      try {
+        await ChatInterface.setPinned(chatGuid: e.guid, isPinned: true, pinIndex: i);
+      } catch (err, s) {
+        Logger.warn("Failed to sync pin index to server", error: err, trace: s, tag: 'ChatsService');
+      }
     });
   }
 
@@ -1188,6 +1195,14 @@ class ChatsService {
     // explicitly trigger a list version update so all conversation list views re-filter.
     _scheduleListVersionUpdate(immediate: true);
 
+    // Sync pin state to the server so other connected clients pick it up.
+    // Non-fatal: local pin state has already been applied above.
+    try {
+      await ChatInterface.setPinned(chatGuid: chat.guid, isPinned: isPinned);
+    } catch (e, s) {
+      Logger.warn("Failed to sync pin status to server", error: e, trace: s, tag: 'ChatsService');
+    }
+
     return chat;
   }
 
@@ -1306,6 +1321,13 @@ class ChatsService {
 
     // Update state if available
     state?.updatePinIndexInternal(value);
+
+    // Sync the explicit pin order to the server so other connected clients pick it up.
+    try {
+      await ChatInterface.setPinned(chatGuid: chatToUpdate.guid, isPinned: true, pinIndex: value);
+    } catch (e, s) {
+      Logger.warn("Failed to sync pin index to server", error: e, trace: s, tag: 'ChatsService');
+    }
   }
 
   /// Set chat unread status

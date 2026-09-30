@@ -60,6 +60,13 @@ class ChatActions {
     await HttpSvc.chat.stopTyping(chatGuid);
   }
 
+  static Future<void> setPinned(dynamic data) async {
+    final chatGuid = data['chatGuid'] as String;
+    final isPinned = data['isPinned'] as bool?;
+    final pinIndex = data['pinIndex'] as int?;
+    await HttpSvc.chat.setPinned(chatGuid, isPinned: isPinned, pinIndex: pinIndex);
+  }
+
   static Future<int?> saveChat(dynamic data) async {
     final guid = data['guid'] as String;
     final updateFlags = (data['updateFlags'] as Map).cast<String, bool>();

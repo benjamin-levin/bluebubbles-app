@@ -153,6 +153,20 @@ class ActionHandler extends GetxService {
           chat.toggleHasUnreadAsync(!data["read"]!, privateMark: false);
         }
         return;
+      case "chat-pin-updated":
+        final pinnedChat = Chat.findOne(guid: data["chatGuid"]);
+        if (pinnedChat == null) return;
+        final isPinned = data["isPinned"] as bool?;
+        final pinIndex = data["pinIndex"] as int?;
+        if (isPinned == false) {
+          await ChatsSvc.setChatPinned(pinnedChat, false);
+        } else if (isPinned == true) {
+          // Apply pin status first (a no-op if this device already applied it locally),
+          // then reconcile the server-assigned order.
+          await ChatsSvc.setChatPinned(pinnedChat, true);
+          await ChatsSvc.setChatPinIndex(pinnedChat, pinIndex);
+        }
+        return;
       case "typing-indicator":
         final chat = ChatsSvc.findChatByGuid(data["guid"]);
         if (chat != null) {

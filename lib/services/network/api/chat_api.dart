@@ -96,6 +96,25 @@ class ChatApi {
     });
   }
 
+  /// Update the pin state of the specified chat (using [guid]). [isPinned]
+  /// sets whether the chat is pinned, and [pinIndex] optionally sets its
+  /// sort position among other pinned chats. This syncs the pin state to
+  /// the server and, from there, to any other connected BlueBubbles clients.
+  Future<Response> setPinned(String guid, {bool? isPinned, int? pinIndex, CancelToken? cancelToken}) async {
+    return _svc.runApiGuarded(() async {
+      final data = <String, dynamic>{};
+      if (isPinned != null) data["isPinned"] = isPinned;
+      if (pinIndex != null) data["pinIndex"] = pinIndex;
+      final response = await _svc.dio.put(
+        "${_svc.apiRoot}/chat/$guid",
+        queryParameters: _svc.buildQueryParams(),
+        data: data,
+        cancelToken: cancelToken,
+      );
+      return _svc.returnSuccessOrError(response);
+    });
+  }
+
   /// Create a chat with the specified [addresses]. Requires an initial [message]
   /// to send.
   Future<Response> create(List<String> addresses, String? message, String service, {CancelToken? cancelToken}) async {

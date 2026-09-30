@@ -80,6 +80,7 @@ class IsolateActons {
     IsolateRequestType.getParticipantsAsync: ChatActions.getParticipantsAsync,
     IsolateRequestType.clearTranscriptAsync: ChatActions.clearTranscriptAsync,
     IsolateRequestType.getChatsAsync: ChatActions.getChatsAsync,
+    IsolateRequestType.setPinned: ChatActions.setPinned,
 
     // Handle
     IsolateRequestType.saveHandleAsync: HandleActions.saveHandleAsync,
